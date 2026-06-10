@@ -1,0 +1,32 @@
+# --- Secrets: never commit ---
+.env
+**/.env
+.tg_token
+**/.tg_token
+allow.txt
+**/allow.txt
+.ask/config
+.ask/ask-states.json
+.ask/lambda/
+*.pem
+*.key
+credentials
+aws-exports.js
+
+# --- Generated / large ---
+node_modules/
+*.mp3
+mp3/
+artists.json
+songs.json
+skill-package/skill.json
+__pycache__/
+*.pyc
+.venv/
+*.log
+
+# --- OS / editor ---
+.DS_Store
+*.swp
+.idea/
+.vscode/
