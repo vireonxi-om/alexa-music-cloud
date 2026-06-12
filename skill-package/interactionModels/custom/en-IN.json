@@ -1,0 +1,255 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "music cloud",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NextIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PreviousIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StartOverIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "PlaySongIntent",
+          "slots": [
+            {
+              "name": "song",
+              "type": "SONG_NAMES"
+            }
+          ],
+          "samples": [
+            "play {song}",
+            "play the song {song}",
+            "play track {song}",
+            "put on {song}",
+            "start {song}",
+            "i want to hear {song}",
+            "play {song} song"
+          ]
+        },
+        {
+          "name": "PlayArtistIntent",
+          "slots": [
+            {
+              "name": "artist",
+              "type": "ARTIST_NAMES"
+            }
+          ],
+          "samples": [
+            "play artist {artist}",
+            "play songs by {artist}",
+            "play music by {artist}",
+            "play some {artist}",
+            "play {artist} music"
+          ]
+        },
+        {
+          "name": "PlayAllIntent",
+          "slots": [],
+          "samples": [
+            "play everything",
+            "play all songs",
+            "play all my music",
+            "shuffle",
+            "shuffle all",
+            "shuffle my music",
+            "play my library",
+            "play music"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "SONG_NAMES",
+          "values": [
+            {
+              "name": {
+                "value": "Sao Paulo"
+              }
+            },
+            {
+              "name": {
+                "value": "Nancy"
+              }
+            },
+            {
+              "name": {
+                "value": "Avangard"
+              }
+            },
+            {
+              "name": {
+                "value": "Montagem Alquimia"
+              }
+            },
+            {
+              "name": {
+                "value": "Ainsi Bas La Vida"
+              }
+            },
+            {
+              "name": {
+                "value": "Luna Bala"
+              }
+            },
+            {
+              "name": {
+                "value": "Hey Mama"
+              }
+            },
+            {
+              "name": {
+                "value": "Amor Na Praia"
+              }
+            },
+            {
+              "name": {
+                "value": "Esse Cara"
+              }
+            },
+            {
+              "name": {
+                "value": "Love Nwantiti"
+              }
+            },
+            {
+              "name": {
+                "value": "Belly Dancer"
+              }
+            },
+            {
+              "name": {
+                "value": "Oiia Oiia"
+              }
+            },
+            {
+              "name": {
+                "value": "Illuminati"
+              }
+            },
+            {
+              "name": {
+                "value": "Illuminati Mashup"
+              }
+            },
+            {
+              "name": {
+                "value": "Unstoppable"
+              }
+            },
+            {
+              "name": {
+                "value": "Manda Lina"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ARTIST_NAMES",
+          "values": [
+            {
+              "name": {
+                "value": "The Weeknd"
+              }
+            },
+            {
+              "name": {
+                "value": "Momoland"
+              }
+            },
+            {
+              "name": {
+                "value": "Lonown"
+              }
+            },
+            {
+              "name": {
+                "value": "Slowed"
+              }
+            },
+            {
+              "name": {
+                "value": "DJ Anas"
+              }
+            },
+            {
+              "name": {
+                "value": "David Guetta"
+              }
+            },
+            {
+              "name": {
+                "value": "Sayfalse"
+              }
+            },
+            {
+              "name": {
+                "value": "CKay"
+              }
+            },
+            {
+              "name": {
+                "value": "Imanbek and Byor"
+              }
+            },
+            {
+              "name": {
+                "value": "W and W"
+              }
+            },
+            {
+              "name": {
+                "value": "Sushin Shyam"
+              }
+            },
+            {
+              "name": {
+                "value": "DJ Dalal"
+              }
+            },
+            {
+              "name": {
+                "value": "Sia"
+              }
+            },
+            {
+              "name": {
+                "value": "Synthmane"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

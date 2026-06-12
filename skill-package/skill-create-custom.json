@@ -1,0 +1,70 @@
+{
+  "vendorId": "M3U3EMIKY5TJ5E",
+  "manifest": {
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Music Cloud",
+          "summary": "Stream your own personal music library.",
+          "description": "Music Cloud streams your own uploaded music library from the cloud. Ask it to play a song or an artist from your collection.",
+          "examplePhrases": [
+            "Alexa, ask Music Cloud to play Sao Paulo",
+            "Alexa, ask Music Cloud to play some Sia",
+            "Alexa, ask Music Cloud to shuffle my music"
+          ],
+          "keywords": [
+            "music",
+            "cloud",
+            "personal",
+            "library"
+          ]
+        },
+        "en-IN": {
+          "name": "Music Cloud",
+          "summary": "Stream your own personal music library.",
+          "description": "Music Cloud streams your own uploaded music library from the cloud. Ask it to play a song or an artist from your collection.",
+          "examplePhrases": [
+            "Alexa, ask Music Cloud to play Sao Paulo",
+            "Alexa, ask Music Cloud to play some Sia",
+            "Alexa, ask Music Cloud to shuffle my music"
+          ],
+          "keywords": [
+            "music",
+            "cloud",
+            "personal",
+            "library"
+          ]
+        }
+      },
+      "category": "STREAMING_SERVICE"
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:YOUR_AWS_ACCOUNT_ID:function:MusicCloudLambda"
+        },
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
+      }
+    },
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "locales": {
+        "en-US": {
+          "privacyPolicyUrl": "https://example.com/privacy"
+        },
+        "en-IN": {
+          "privacyPolicyUrl": "https://example.com/privacy"
+        }
+      }
+    }
+  }
+}
