@@ -1,0 +1,20 @@
+{
+  "name": "dropbox-catalog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Andrei Ciobanu",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1690.0",
+    "bluebird": "^3.5.3",
+    "dotenv": "^8.1.0",
+    "lodash": "^4.17.21",
+    "music-metadata": "^7.14.0",
+    "recursive-readdir": "^2.2.3",
+    "yargs": "^14.0.0"
+  }
+}
