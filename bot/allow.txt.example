@@ -1,0 +1,5 @@
+# Allowed Telegram user ids — one per line.
+# Copy this to allow.txt (which is git-ignored) and add your own id.
+# Find your id by messaging @userinfobot on Telegram.
+# Leaving allow.txt empty allows ANY user — not recommended.
+123456789
