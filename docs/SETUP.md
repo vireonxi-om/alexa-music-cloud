@@ -1,4 +1,4 @@
-# Music Cloud — Deployment Guide
+# echocrate — Deployment Guide
 
 This walks you through standing up Music Cloud from scratch. Budget ~30–45 minutes the first time.
 
