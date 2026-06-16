@@ -1,8 +1,8 @@
-# echocrate
+# alexa-music-cloud
 
 **Stream your own MP3 library on Alexa, ad-free, with your voice.**
 
-> **echocrate** is the engine behind a custom Alexa skill you invoke as *"Music Cloud"*.
+> A self-hosted Alexa skill you invoke as *"Music Cloud"* — play your own MP3s on any Echo, no subscription, no ads.
 > Built by **OMSHAKTHI (VIREON)** — a modernized rebuild of the archived 2019 project.
 
 
