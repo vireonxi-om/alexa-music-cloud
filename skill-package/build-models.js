@@ -37,7 +37,13 @@ const model = (invocationName) => ({
                         'put on {song}',
                         'start {song}',
                         'i want to hear {song}',
-                        'play {song} song'
+                        'play {song} song',
+                        'play',
+                        'play music',
+                        'play a song',
+                        'play something',
+                        'start playing',
+                        'just play'
                     ]
                 },
                 {
@@ -58,11 +64,23 @@ const model = (invocationName) => ({
                         'play everything',
                         'play all songs',
                         'play all my music',
+                        'play my library',
+                        'play all',
+                        'play the playlist',
+                        'play my playlist'
+                    ]
+                },
+                {
+                    name: 'ShuffleIntent',
+                    slots: [],
+                    samples: [
                         'shuffle',
                         'shuffle all',
                         'shuffle my music',
-                        'play my library',
-                        'play music'
+                        'shuffle my library',
+                        'shuffle everything',
+                        'shuffle songs',
+                        'play music on shuffle'
                     ]
                 }
             ],

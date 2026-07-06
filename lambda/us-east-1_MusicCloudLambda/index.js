@@ -77,8 +77,11 @@ const handleIntent = async (event) => {
         case 'PlayArtistIntent':
             return playArtist(event, userId);
         case 'PlayAllIntent':
+            return playLibrary(event, userId);
+        case 'ShuffleIntent':
+            return playAll(event, userId);
         case 'AMAZON.ResumeIntent':
-            return name === 'PlayAllIntent' ? playAll(event, userId) : resume(event, userId);
+            return resume(event, userId);
         case 'AMAZON.NextIntent':
         case 'AMAZON.NextCommandIssued':
             return skip(event, userId, +1);
@@ -108,16 +111,31 @@ const handleIntent = async (event) => {
 
 // ---- Playback intents -----------------------------------------------------
 
+// Resolve the first playable track at or after startPos, wrapping once around
+// the queue and skipping ids that no longer exist (e.g. removed songs).
+const resolveValid = async (order, startPos, dir = +1) => {
+    const n = order.length;
+    for (let step = 0; step < n; step++) {
+        const pos = ((startPos + dir * step) % n + n) % n;
+        const item = await store.getById(order[pos]);
+        if (item) return { item, pos };
+    }
+    return null;
+};
+
 const startQueue = async (userId, order, startPos, offset = 0) => {
     if (!order.length) {
         return b.response({ speech: `I couldn't find that in your library.`, endSession: true });
     }
-    const pos = Math.max(0, Math.min(startPos, order.length - 1));
-    const item = await store.getById(order[pos]);
-    if (!item) {
-        return b.response({ speech: `That track is unavailable.`, endSession: true });
+    const clamped = Math.max(0, Math.min(startPos, order.length - 1));
+    const found = await resolveValid(order, clamped, +1);
+    if (!found) {
+        return b.response({ speech: `Your library is empty.`, endSession: true });
     }
-    await store.putState(userId, order, pos, offset);
+    const { item, pos } = found;
+    // Keep the on-disk queue clean so stale/removed ids don't linger.
+    const cleanOrder = order;
+    await store.putState(userId, cleanOrder, pos, offset);
     return b.response({
         speech: `Playing ${b.titleOf(item)}.`,
         directives: [b.playDirective(item, pos, offset)],
@@ -127,7 +145,9 @@ const startQueue = async (userId, order, startPos, offset = 0) => {
 
 const playSong = async (event, userId) => {
     const q = slotValue(event, 'song');
-    if (!q) return b.response({ speech: `Which song?`, endSession: false });
+    // Bare "ask Music Cloud to play" (no song named) => play the whole library
+    // in repeat/playlist mode.
+    if (!q) return playLibrary(event, userId);
     const match = await store.matchTrack(q);
     if (!match) return b.response({ speech: `I couldn't find ${q} in your library.`, endSession: true });
 
@@ -145,8 +165,16 @@ const playArtist = async (event, userId) => {
     return startQueue(userId, matched.map((t) => t.id), 0);
 };
 
+// Whole library in stable order (repeat playlist mode via looping enqueue).
+const playLibrary = async (event, userId) => {
+    const all = await store.getAllTracks();
+    if (!all.length) return b.response({ speech: `Your library is empty.`, endSession: true });
+    return startQueue(userId, all.map((t) => t.id), 0);
+};
+
 const playAll = async (event, userId) => {
     const all = await store.getAllTracks();
+    if (!all.length) return b.response({ speech: `Your library is empty.`, endSession: true });
     // light shuffle
     const ids = all.map((t) => t.id);
     for (let i = ids.length - 1; i > 0; i--) {
@@ -204,12 +232,11 @@ const handleAudioPlayer = async (event) => {
         case 'AudioPlayer.PlaybackNearlyFinished': {
             const st = await store.getState(userId);
             if (!st || !st.order || !st.order.length) return b.response({ endSession: true });
-            const nextPos = pos + 1;
-            if (nextPos >= st.order.length) return b.response({ endSession: true }); // end of queue
-            const nextItem = await store.getById(st.order[nextPos]);
-            if (!nextItem) return b.response({ endSession: true });
+            // Repeat/playlist mode: wrap past the end, and skip any removed tracks.
+            const found = await resolveValid(st.order, pos + 1, +1);
+            if (!found) return b.response({ endSession: true });
             return b.response({
-                directives: [b.enqueueDirective(nextItem, nextPos, token)],
+                directives: [b.enqueueDirective(found.item, found.pos, token)],
                 endSession: true
             });
         }
@@ -218,9 +245,20 @@ const handleAudioPlayer = async (event) => {
             if (st && st.order) await store.putState(userId, st.order, pos, currentOffset(event));
             return b.response({ endSession: true });
         }
-        case 'AudioPlayer.PlaybackFailed':
+        case 'AudioPlayer.PlaybackFailed': {
+            // A stream can fail if its track was removed after being enqueued.
+            // Recover by jumping to the next valid track instead of going silent.
             console.error('PLAYBACK_FAILED', JSON.stringify(event.request.error || {}));
-            return b.response({ endSession: true });
+            const st = await store.getState(userId);
+            if (!st || !st.order || !st.order.length) return b.response({ endSession: true });
+            const found = await resolveValid(st.order, pos + 1, +1);
+            if (!found) return b.response({ endSession: true });
+            await store.putState(userId, st.order, found.pos, 0);
+            return b.response({
+                directives: [b.playDirective(found.item, found.pos, 0)],
+                endSession: true
+            });
+        }
         case 'AudioPlayer.PlaybackFinished':
         default:
             return b.response({ endSession: true });

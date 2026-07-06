@@ -63,6 +63,31 @@ async function main() {
         if (fs.existsSync(local)) fs.unlinkSync(local);
     } catch (e) { /* ignore */ }
 
+    // 4b. Purge all per-user playback queues (STATE# rows). They hold an
+    // `order` array of track ids; a removed id left in there makes Alexa try
+    // to stream a deleted S3 object -> silence / "black audio". Dropping the
+    // state rows forces a fresh full-library queue on the next play.
+    step('clearing stale playback queues');
+    try {
+        let ExclusiveStartKey;
+        const stateIds = [];
+        do {
+            const res = await doc.scan({
+                TableName: TABLE,
+                ExclusiveStartKey,
+                FilterExpression: 'begins_with(id, :p)',
+                ExpressionAttributeValues: { ':p': 'STATE#' }
+            }).promise();
+            (res.Items || []).forEach((it) => stateIds.push(it.id));
+            ExclusiveStartKey = res.LastEvaluatedKey;
+        } while (ExclusiveStartKey);
+        for (const sid of stateIds) {
+            await doc.delete({ TableName: TABLE, Key: { id: sid } }).promise();
+        }
+    } catch (e) {
+        console.log('state purge warning:', (e.message || e).slice(0, 120));
+    }
+
     // 5. Rebuild catalog
     step('rebuilding catalog');
     execSync(`node "${path.join(HERE, 'index.js')}" catalog`, { cwd: HERE, stdio: 'ignore', timeout: 60000 });
